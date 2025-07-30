@@ -1,0 +1,6 @@
+telos_boltace
+telos_boltor
+telos_akbolto
+centaur_aegis
+corvas_barrel
+cyngas_barrel
