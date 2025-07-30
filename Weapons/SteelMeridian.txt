@@ -1,0 +1,8 @@
+vaykor_hek
+vaykor_sydon
+vaykor_marelok
+agkuza_guard
+corvas_stock
+fluctus_stock
+kaszas_handle
+velocitus_receiver

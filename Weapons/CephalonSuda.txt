@@ -1,0 +1,8 @@
+synoid_heliocor
+synoid_simulor
+synoid_gammacor
+corvas_receiver
+cyngas_receiver
+decurion_receiver
+fluctus_barrel
+velocitus_barrel
