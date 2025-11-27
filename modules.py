@@ -99,7 +99,7 @@ def choice(syndicate):
         print("Please choose an item from the options below: ")
         for i, folder in enumerate(folders):
             print(str(i) + ". " + folder)
-        folderChosen = input("Please enter a number from 0-" + str(len(folders)) + ": ")
+        folderChosen = input("Please enter a number from 0-" + str(len(folders) - 1) + ": ")
 
         if (0 <= int(folderChosen) < len(folders)):
             print("\n")
