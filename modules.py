@@ -74,14 +74,38 @@ def get_mod_list(syndicate):
         mod_list = file.readlines()
 
     mod_list = [line.strip() for line in mod_list]
+
+    mod_dict = {}
     
-    for mod in mod_list:
-        print(f"mod: {mod}")
+    for i, mod in enumerate(mod_list):
+        print(str(i) + "/" + str(len(mod_list)) + " mods checked.")
         mod_orders = multi_plat_orders(mod)
         mod_orders = filter_orders(mod_orders)
         if mod_orders:
             for order in mod_orders:
-                print(f"{order.platinum}p for {order.quantity} unit(s) by {order.user.ingame_name}")
+                if mod not in mod_dict:
+                    mod_dict[mod] = [order]
+                if mod in mod_dict:
+                    mod_dict[mod].append(order)
+
+    print("==================")
+
+    mod_count = len(mod_dict.keys())
+    if mod_count == 0:
+        print("No orders found.")
+    if mod_count == 1:
+        print("There was " + str(len(mod_dict.keys())) + " item found with orders.")
+    else:
+        print("There were " + str(len(mod_dict.keys())) + " items found with orders.")
+    
+    print("-------------------")
+    for modName, modOrders in mod_dict.items():
+        print(modName + " orders: ")
+        for order in modOrders:
+            print(f"{order.platinum}p for {order.quantity} unit(s) by {order.user.ingame_name}")
+    print("-------------------")
+    print("==================")
+
 
 def choice(syndicate):
     choosing = True
