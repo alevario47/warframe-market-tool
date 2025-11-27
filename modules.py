@@ -1,5 +1,6 @@
 import pywmapi as wm
 from pywmapi.common import Platform
+import os
 
 def get_syndicate():
     syndicates = {
@@ -48,60 +49,41 @@ def multi_plat_orders(item):
                 orders.append(order)
     return orders
 
-def get_weapon_list(syndicate):
-    file_path = f"./Weapons/{syndicate}.txt"
+def get_order_list(syndicate, folder):
+    file_path = f"./{folder}/{syndicate}.txt"
 
     with open(file_path, 'r') as file:
-        weapon_list = file.readlines()
+        item_list = file.readlines()
 
-    weapon_list = [line.strip() for line in weapon_list]
+    item_list = [line.strip() for line in item_list]
+
+    item_dict = {}
     
-    for weapon in weapon_list:
-        weapon_orders = multi_plat_orders(weapon)
-        weapon_orders = filter_orders(weapon_orders)
-        if weapon_orders:
-            print(f"Weapon: {weapon}")
-            for order in weapon_orders:
-                print(f"{order.platinum}p for {order.quantity} unit(s) by {order.user.ingame_name}")
-            print("-----------")
-        
-
-
-def get_mod_list(syndicate):
-    file_path = f"./Mods/{syndicate}.txt"
-
-    with open(file_path, 'r') as file:
-        mod_list = file.readlines()
-
-    mod_list = [line.strip() for line in mod_list]
-
-    mod_dict = {}
-    
-    for i, mod in enumerate(mod_list):
-        print(str(i) + "/" + str(len(mod_list)) + " mods checked.")
-        mod_orders = multi_plat_orders(mod)
-        mod_orders = filter_orders(mod_orders)
-        if mod_orders:
-            for order in mod_orders:
-                if mod not in mod_dict:
-                    mod_dict[mod] = [order]
-                if mod in mod_dict:
-                    mod_dict[mod].append(order)
+    for i, item in enumerate(item_list):
+        print(str(i) + "/" + str(len(item_list)) + f"{folder.lower()} checked.")
+        item_orders = multi_plat_orders(item)
+        item_orders = filter_orders(item_orders)
+        if item_orders:
+            for order in item_orders:
+                if item not in item_dict:
+                    item_dict[item] = [order]
+                if item in item_dict:
+                    item_dict[item].append(order)
 
     print("==================")
 
-    mod_count = len(mod_dict.keys())
-    if mod_count == 0:
+    item_count = len(item_dict.keys())
+    if item_count == 0:
         print("No orders found.")
-    if mod_count == 1:
-        print("There was " + str(len(mod_dict.keys())) + " item found with orders.")
+    if item_count == 1:
+        print("There was " + str(len(item_dict.keys())) + f" {folder.lower()} found with orders.")
     else:
-        print("There were " + str(len(mod_dict.keys())) + " items found with orders.")
+        print("There were " + str(len(item_dict.keys())) + f" {folder.lower()} found with orders.")
     
     print("-------------------")
-    for modName, modOrders in mod_dict.items():
-        print(modName + " orders: ")
-        for order in modOrders:
+    for itemName, itemOrders in item_dict.items():
+        print(itemName + " orders: ")
+        for order in itemOrders:
             print(f"{order.platinum}p for {order.quantity} unit(s) by {order.user.ingame_name}")
     print("-------------------")
     print("==================")
@@ -109,15 +91,19 @@ def get_mod_list(syndicate):
 
 def choice(syndicate):
     choosing = True
+    folders = [f for f in os.listdir() if os.path.isdir(f) if not f[0] == "_" if not f[0] == "."]
+    if not folders:
+        print("No folders found. Please add a folder with lists of items.")
+
     while choosing:
-        items = input("Weapons (W) or Mods (M)? ")
-        if items.lower() == 'w':
+        print("Please choose an item from the options below: ")
+        for i, folder in enumerate(folders):
+            print(str(i) + ". " + folder)
+        folderChosen = input("Please enter a number from 0-" + str(len(folders)) + ": ")
+
+        if (0 <= int(folderChosen) < len(folders)):
             print("\n")
-            weapon_orders = get_weapon_list(syndicate)
-            choosing = False
-        elif items.lower() == 'm':
-            print("\n")
-            mod_orders = get_mod_list(syndicate)
+            orders = get_order_list(syndicate, folders[int(folderChosen)])
             choosing = False
         else:
-            print("Please enter W or M")
+            print("Invalid selection.")
