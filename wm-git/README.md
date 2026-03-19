@@ -14,6 +14,7 @@ A simple Python CLI tool to fetch and display **online buy orders** from [Warfra
 
 - Python 3.8 or later
 - [`pywmapi`](https://pypi.org/project/pywmapi)
+    - **ADDITIONAL NOTE:** API was recently migrated to v2, expect some issues
 
 Install dependencies with:
 
